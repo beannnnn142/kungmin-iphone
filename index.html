@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Kyungmin iPhone17</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;}
+body{background:#222;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+
+/* iPhone17 灵动岛机型外壳 */
+.iphone{
+  width:375px;height:812px;
+  border-radius:46px;
+  border:12px solid #121212;
+  position:relative;
+  overflow:hidden;
+  background:#000;
+}
+/* 灵动岛 */
+.island{
+  width:120px;height:34px;
+  background:#000;
+  border-radius:999px;
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:99;
+}
+.screen{
+  width:100%;height:100%;
+  position:relative;
+  overflow:hidden;
+}
+.page{
+  width:100%;height:100%;
+  position:absolute;
+  top:0;left:0;
+  transition:transform 0.35s ease-out;
+}
+.hideLeft{transform:translateX(-100%);}
+.hideRight{transform:translateX(100%);}
+
+/* ========== 锁屏页 ========== */
+.lockPage{
+  background:url("lock_bg.jpg") center/cover no-repeat;
+  color:#fff;
+  padding:64px 20px 32px;
+  display:flex;
+  flex-direction:column;
+}
+.lockTime{text-align:center;margin-top:40px;}
+#lockTime{font-size:86px;font-weight:200;letter-spacing:-3px;}
+#lockDate{font-size:20px;opacity:0.82;margin-top:4px;}
+.countCard{
+  backdrop-filter:blur(18px);
+  background:rgba(255,255,255,0.12);
+  border-radius:20px;
+  padding:16px 20px;
+  margin-top:auto;
+}
+.countTit{font-size:16px;}
+.countSub{font-size:14px;opacity:0.7;margin-top:4px;}
+.hintUnlock{text-align:center;margin-top:12px;font-size:13px;opacity:0.7;}
+.indicator{
+  width:120px;height:4px;
+  background:#fff;
+  border-radius:99px;
+  margin:20px auto 0;
+  opacity:0.85;
+  cursor:pointer;
+}
+
+/* ========== 主屏幕 ========== */
+.homePage{
+  background:url("home_bg.jpg") center/cover no-repeat;
+  color:#fff;
+  padding:72px 18px 28px;
+}
+.appGrid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:20px;
+}
+.app{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  cursor:pointer;
+}
+.appIcon{
+  width:54px;height:54px;
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  margin-bottom:5px;
+}
+.appName{font-size:11.5px;text-shadow:0 0 3px #000;}
+.dock{
+  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  width:90%;
+  backdrop-filter:blur(22px);
+  background:rgba(255,255,255,0.18);
+  border-radius:26px;
+  padding:12px 14px;
+  display:grid;grid-template-columns: repeat(4,1fr);
+  gap:12px;
+}
+
+/* ========== 通用内页样式 ========== */
+.innerPage{
+  background:#fff;color:#111;
+  padding:74px 16px 20px;
+}
+.innerPage.dark{background:#000;color:#fff;}
+.backBtn{
+  position:absolute;top:66px;left:14px;
+  color:#007AFF;font-size:17px;
+  cursor:pointer;z-index:10;
+}
+.pageTitle{font-size:20px;font-weight:600;margin-bottom:16px;}
+
+/* KKT 联系人页 */
+.kktList{display:flex;flex-direction:column;gap:14px;}
+.kktItem{display:flex;gap:12px;align-items:center;}
+.kktAvatar{width:44px;height:44px;border-radius:50%;background:#ddd;display:grid;place-items:center;font-size:20px;}
+.kktName{font-size:16px;}
+
+/* 相册 / Ins / Reels 图片网格 */
+.imgGrid{display:grid;grid-template-columns: repeat(3,1fr);gap:3px;}
+.imgGrid img{width:100%;aspect-ratio:1;object-fit:cover;}
+.reelsGrid{display:grid;grid-template-columns: repeat(2,1fr);gap:4px;}
+.reelsGrid img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:8px;}
+
+/* 备忘录 */
+.noteTextarea{width:100%;height:340px;border:0;outline:none;font-size:17px;resize:none;}
+</style>
+</head>
+<body>
+<div class="iphone">
+  <div class="island"></div>
+  <div class="screen">
+    <!-- 锁屏 -->
+    <div class="page lockPage" id="lockPage">
+      <div class="lockTime">
+        <div id="lockTime"></div>
+        <div id="lockDate"></div>
+      </div>
+      <div class="countCard">
+        <div class="countTit">경민 생일 🎂</div>
+        <div class="countSub">1월 31일 · <span id="birthCount">0</span>일 후</div>
+      </div>
+      <div class="hintUnlock">위로 밀어서 잠금해제</div>
+      <div class="indicator" onclick="unlock()"></div>
+    </div>
+
+    <!-- 主屏幕 -->
+    <div class="page homePage hideRight" id="homePage">
+      <div class="appGrid">
+        <div class="app" onclick="openPage('brawlPage')">
+          <div class="appIcon" style="background:#CC3333">🤖</div>
+          <div class="appName">브롤스타즈</div>
+        </div>
+        <div class="app" onclick="openPage('amPage')">
+          <div class="appIcon" style="background:#FA243C">🎵</div>
+          <div class="appName">Apple Music</div>
+        </div>
+        <div class="app" onclick="openPage('melonPage')">
+          <div class="appIcon" style="background:#00CD3C">🍈</div>
+          <div class="appName">멜론</div>
+        </div>
+        <div class="app" onclick="openPage('baeminPage')">
+          <div class="appIcon" style="background:#00CC99">🛵</div>
+          <div class="appName">배달의민족</div>
+        </div>
+
+        <div class="app" onclick="openPage('photoPage')">
+          <div class="appIcon" style="background:linear-gradient(45deg,#ff3b30,#ffcc00)">🖼</div>
+          <div class="appName">사진</div>
+        </div>
+        <div class="app" onclick="openPage('memoPage')">
+          <div class="appIcon" style="background:#fff;color:#222">📝</div>
+          <div class="appName">메모</div>
+        </div>
+        <div class="app" onclick="openPage('kktPage')">
+          <div class="appIcon" style="background:#FFE600;color:#222">💬</div>
+          <div class="appName">카카오톡</div>
+        </div>
+        <div class="app" onclick="openPage('insPage')">
+          <div class="appIcon" style="background:linear-gradient(45deg,#833AB4,#FD1D1D,#FCB045)">📷</div>
+          <div class="appName">인스타그램</div>
+        </div>
+
+        <div class="app" onclick="openPage('reelsPage')">
+          <div class="appIcon" style="background:#000;color:#fff">▶</div>
+          <div class="appName">릴스</div>
+        </div>
+        <div class="app" onclick="openPage('ytPage')">
+          <div class="appIcon" style="background:#FF0000">▶️</div>
+          <div class="appName">유튜브</div>
+        </div>
+        <div class="app" onclick="openPage('calPage')">
+          <div class="appIcon" style="background:#FF3B30">📅</div>
+          <div class="appName">캘린더</div>
+        </div>
+        <div class="app" onclick="openPage('settingPage')">
+          <div class="appIcon" style="background:#8E8E93">⚙️</div>
+          <div class="appName">설정</div>
+        </div>
+      </div>
+      <div class="dock">
+        <div class="app" onclick="lockPhone()">
+          <div class="appIcon" style="background:#222">🔒</div>
+        </div>
+      </div>
+      <div class="indicator" onclick="goHome()"></div>
+    </div>
+
+    <!-- ========== 各个APP内页 ========== -->
+    <div class="page innerPage dark hideRight" id="brawlPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">브롤스타즈</div>
+      <div style="opacity:0.7;margin-top:10px;">아직 준비중...</div>
+    </div>
+    <div class="page innerPage dark hideRight" id="amPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">Apple Music</div>
+      <div style="opacity:0.7;margin-top:10px;">플레이리스트 공간</div>
+    </div>
+    <div class="page innerPage dark hideRight" id="melonPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">멜론</div>
+      <div style="opacity:0.7;margin-top:10px;">차트 & 음악 페이지</div>
+    </div>
+    <div class="page innerPage dark hideRight" id="baeminPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">배달의민족</div>
+      <div style="opacity:0.7;margin-top:10px;">주문 페이지</div>
+    </div>
+
+    <div class="page innerPage dark hideRight" id="photoPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">사진</div>
+      <div class="imgGrid">
+        < img src="ins1.jpg">< img src="ins2.jpg">< img src="ins3.jpg">
+      </div>
+    </div>
+
+    <div class="page innerPage hideRight" id="memoPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">메모</div>
+      <textarea class="noteTextarea" placeholder="메모를 적어보세요"></textarea>
+    </div>
+
+    <div class="page innerPage hideRight" id="kktPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">카카오톡</div>
+      <div class="kktList">
+        <div class="kktItem"><div class="kktAvatar">💛</div><div class="kktName">경민</div></div>
+        <div class="kktItem"><div class="kktAvatar">🤍</div><div class="kktName">친구1</div></div>
+        <div class="kktItem"><div class="kktAvatar">🩵</div><div class="kktName">친구2</div></div>
+      </div>
+    </div>
+
+    <div class="page innerPage dark hideRight" id="insPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">인스타그램</div>
+      <div class="imgGrid">
+        < img src="ins1.jpg">< img src="ins2.jpg">< img src="ins3.jpg">
+      </div>
+    </div>
+
+    <div class="page innerPage dark hideRight" id="reelsPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">릴스</div>
+      <div class="reelsGrid">
+        < img src="ins1.jpg">< img src="ins2.jpg">
+      </div>
+    </div>
+
+    <div class="page innerPage dark hideRight" id="ytPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">유튜브</div>
+      <div style="opacity:0.7;margin-top:10px;">영상 모음</div>
+    </div>
+    <div class="page innerPage hideRight" id="calPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">캘린더</div>
+      <div style="margin-top:10px;">경민 생일 : 1월 31일 🎂<br>남은 날짜 : <span id="calCount">0</span>일</div>
+    </div>
+    <div class="page innerPage hideRight" id="settingPage">
+      <div class="backBtn" onclick="goHome()">← 뒤로</div>
+      <div class="pageTitle">설정</div>
+      <div style="opacity
